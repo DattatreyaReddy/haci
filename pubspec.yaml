@@ -1,0 +1,29 @@
+name: haci
+version: 1.0.0+1
+publish_to: none
+description: A new Flutter project.
+environment:
+  sdk: '>=2.17.0-69.2.beta <3.0.0'
+
+dependencies:
+  camera: ^0.9.4+18
+  cloud_firestore: ^3.1.10
+  cupertino_icons: ^1.0.2
+  firebase_core: ^1.13.1
+  flutter:
+    sdk: flutter
+  get: 4.6.1
+  get_storage: ^2.0.3
+  google_fonts: ^2.3.1
+  js: ^0.6.4
+
+dev_dependencies:
+  flutter_lints: ^1.0.0
+  flutter_test:
+    sdk: flutter
+  lints: 1.0.1
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/

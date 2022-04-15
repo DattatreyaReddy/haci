@@ -1,0 +1,1 @@
+const int int64MaxValue = 9007199254740992;

@@ -1,0 +1,9 @@
+{
+  "balls": -1,
+  "ballsType": "",
+  "bluePalyer" : "",
+  "redPalyer" : "",
+  "nowBatting": "",
+  "blueScore" : 1,
+  "redScore" : 1
+}

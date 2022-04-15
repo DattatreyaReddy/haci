@@ -1,0 +1,4 @@
+enum BallsType {
+  limitedBalls,
+  unlimitedBalls,
+}
