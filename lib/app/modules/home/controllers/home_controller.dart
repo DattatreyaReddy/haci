@@ -43,7 +43,7 @@ class HomeController extends GetxController {
   }
 
   Future<void> joinGround() async {
-    if (userName.text.isEmpty) {
+    if (userName.text.isEmpty || groundId.text.isEmpty) {
       Get.snackbar("Empty User Name", "User name Can't be Empty");
       return;
     }

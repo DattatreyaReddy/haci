@@ -12,6 +12,7 @@ class HomeView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // resizeToAvoidBottomInset: false,
       body: Container(
         width: context.width,
         decoration: BoxDecoration(
@@ -23,23 +24,23 @@ class HomeView extends GetView<HomeController> {
           ),
         ),
         padding: EdgeInsets.all(100),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        child: ListView(
+          // crossAxisAlignment: CrossAxisAlignment.center,
+          // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Text(
               "HaCi",
               textAlign: TextAlign.center,
               style: GoogleFonts.specialElite(
                   textStyle:
-                      Get.textTheme.headline1?.copyWith(color: Colors.white)),
+                      Get.textTheme.headline6?.copyWith(color: Colors.white)),
               // style: ,
             ),
             Text(
               "ONLINE",
               textAlign: TextAlign.center,
               style: GoogleFonts.frederickaTheGreat(
-                textStyle: Get.textTheme.headline2
+                textStyle: Get.textTheme.headline6
                     ?.copyWith(color: Colors.yellowAccent),
               ),
             ),
@@ -50,7 +51,7 @@ class HomeView extends GetView<HomeController> {
                 textAlign: TextAlign.center,
                 style: GoogleFonts.fredokaOne(
                   textStyle:
-                      Get.textTheme.headline5?.copyWith(color: Colors.white),
+                      Get.textTheme.headline6?.copyWith(color: Colors.white),
                 ),
               ),
             ),
@@ -71,34 +72,29 @@ class HomeView extends GetView<HomeController> {
                 ),
               ),
             ),
-            ConstrainedBox(
-              constraints: BoxConstraints(maxWidth: 450),
-              child: Divider(
-                thickness: 1,
-                color: Colors.white,
-              ),
+            ListTile(
+              title: Obx(() => DropdownButton<BallsType>(
+                    value: controller.ballsType,
+                    borderRadius: BorderRadius.circular(20),
+                    underline: Container(),
+                    items: [
+                      DropdownMenuItem(
+                        value: BallsType.limitedBalls,
+                        child: Text("Limited Overs"),
+                      ),
+                      DropdownMenuItem(
+                        value: BallsType.unlimitedBalls,
+                        child: Text("Unlimited Overs"),
+                      ),
+                    ],
+                    onChanged: (item) {
+                      controller.ballsType = item!;
+                    },
+                  )),
             ),
-            Obx(() => DropdownButton<BallsType>(
-                  value: controller.ballsType,
-                  borderRadius: BorderRadius.circular(20),
-                  underline: Container(),
-                  items: [
-                    DropdownMenuItem(
-                      value: BallsType.limitedBalls,
-                      child: Text("Limited Overs"),
-                    ),
-                    DropdownMenuItem(
-                      value: BallsType.unlimitedBalls,
-                      child: Text("Unlimited Overs"),
-                    ),
-                  ],
-                  onChanged: (item) {
-                    controller.ballsType = item!;
-                  },
-                )),
             Obx(() => controller.ballsType == BallsType.limitedBalls
                 ? Container(
-                  padding: EdgeInsets.all(20),
+                    padding: EdgeInsets.all(20),
                     constraints: BoxConstraints(maxWidth: 450),
                     child: TextField(
                       controller: controller.noOfballs,
@@ -183,37 +179,6 @@ class HomeView extends GetView<HomeController> {
                     ),
                   ),
                 ],
-              ),
-            ),
-            Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-              clipBehavior: Clip.antiAlias,
-              child: Container(
-                padding: EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      Colors.yellow.shade100,
-                      Colors.orange,
-                    ],
-                  ),
-                ),
-                constraints: BoxConstraints(maxWidth: 450),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Text(
-                      "How To Play:",
-                      style: Get.textTheme.subtitle1?.copyWith(
-                        color: Colors.red,
-                      ),
-                    )
-                  ],
-                ),
               ),
             ),
           ],

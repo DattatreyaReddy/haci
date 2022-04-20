@@ -15,6 +15,7 @@ class GroundController extends GetxController {
   late final String groundId;
   late final String userName;
 
+  CameraImage? cameraImage;
   final RxInt _score = 0.obs;
   int get score => _score.value;
   void scoreUpdate(int value) {
@@ -41,7 +42,7 @@ class GroundController extends GetxController {
   bool get lockInput => _lockInput.value;
   set lockInput(bool value) => _lockInput.value = value;
 
-final RxBool _showCam = false.obs;
+  final RxBool _showCam = false.obs;
   bool get showCam => _showCam.value;
   set showCam(bool value) => _showCam.value = value;
 
@@ -163,7 +164,8 @@ final RxBool _showCam = false.obs;
 
   @override
   void onReady() async {
-    
+    cameraController =
+        CameraController(cameras[1], ResolutionPreset.low, enableAudio: false);
     print(cameraController);
     super.onReady();
   }

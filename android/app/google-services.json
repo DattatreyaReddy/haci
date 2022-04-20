@@ -1,0 +1,82 @@
+{
+  "project_info": {
+    "project_number": "766895289234",
+    "project_id": "haci-bd4b3",
+    "storage_bucket": "haci-bd4b3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:766895289234:android:b57416680e21cc5b12c74b",
+        "android_client_info": {
+          "package_name": "com.glassdiary.haci"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "766895289234-3hjatn6676ivdcgsrlaf987v78u7qpva.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBfcdlrNSspRL6ZFUW8YzyxjJkZ8EDB54k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "766895289234-3hjatn6676ivdcgsrlaf987v78u7qpva.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "766895289234-fio5ev5iibasr811adfod0brt7qdfor1.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.glassdiary.haci.haci"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:766895289234:android:d1e17dff378dda7112c74b",
+        "android_client_info": {
+          "package_name": "com.glassdiary.haci.haci"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "766895289234-3hjatn6676ivdcgsrlaf987v78u7qpva.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBfcdlrNSspRL6ZFUW8YzyxjJkZ8EDB54k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "766895289234-3hjatn6676ivdcgsrlaf987v78u7qpva.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "766895289234-fio5ev5iibasr811adfod0brt7qdfor1.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.glassdiary.haci.haci"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

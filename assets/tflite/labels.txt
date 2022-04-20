@@ -1,0 +1,10 @@
+alph_c
+blank
+five
+four
+one
+six
+three
+thumbsdown
+two
+zero
