@@ -1,19 +1,27 @@
 import 'package:camera/camera.dart';
 import 'package:get/get.dart';
+import 'package:haci/app/core/image_utils.dart';
 import 'package:haci/app/data/ball_model.dart';
 import 'package:haci/app/data/enums/run_type.dart';
 import 'package:haci/app/data/enums/team.dart';
 import 'package:haci/app/data/ground_model.dart';
 import 'package:haci/app/modules/ground/repository/ground_repository.dart';
 import 'package:haci/main.dart';
+import 'package:image/image.dart' as img;
+
+import '../../../core/classifier.dart';
 
 class GroundController extends GetxController {
   //TODO: Implement GroundController
 
   CameraController? cameraController;
   final GroundReposiory reposiory = GroundReposiory();
+  final Classifier _classifier = Classifier();
+  img.Image? i;
   late final String groundId;
   late final String userName;
+  bool initialCamera = false;
+  RxString hi = "".obs;
 
   CameraImage? cameraImage;
   final RxInt _score = 0.obs;
@@ -78,6 +86,11 @@ class GroundController extends GetxController {
 
   Future<void> addBall() async {
     lockInput = true;
+    try {
+      await cameraController?.stopImageStream();
+    } catch (e) {
+      print(e);
+    }
     await reposiory.addBall(
       groundId: groundId,
       nowBatting: Team.values
@@ -96,6 +109,24 @@ class GroundController extends GetxController {
   List<Ball> presentInnings() =>
       ground.nowBatting == Team.redTeam.name ? redBalls : blueBalls;
 
+  void startStream() {
+    int cnt = 0;
+    // showCam = true;
+    try {
+      cameraController?.startImageStream((image) async {
+        // image.
+        cameraImage = image;
+        cnt += 1;
+        if (cnt % 50 == 1) {
+          predict();
+          cnt = cnt % 50;
+        }
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
+
   @override
   void onInit() {
     groundId = Get.parameters["groundId"]!;
@@ -112,8 +143,13 @@ class GroundController extends GetxController {
       groundId: groundId,
       teamName: Team.blueTeam,
     ));
-    _ground.listen((p0) {
+    _ground.listen((p0) async {
       lockInput = false;
+      try {
+        startStream();
+      } catch (e) {
+        print(e);
+      }
     });
     _blueBalls.listen(
       (ball) {
@@ -157,21 +193,39 @@ class GroundController extends GetxController {
         print(val);
         addBall();
       },
-      time: 1.seconds,
+      time: 3.seconds,
     );
     super.onInit();
   }
 
   @override
   void onReady() async {
+    // print(cameras);
     cameraController =
-        CameraController(cameras[1], ResolutionPreset.low, enableAudio: false);
-    print(cameraController);
+        CameraController(cameras[0], ResolutionPreset.low, enableAudio: false);
+    // print(cameraController);
     super.onReady();
   }
 
   @override
   void onClose() {
     cameraController?.dispose();
+  }
+
+  void predict() async {
+    img.Image imageInput = ImageUtils.convertCameraImageToBin(cameraImage!)!;
+    i = imageInput;
+
+    var pred = _classifier.predict(imageInput);
+    print(pred);
+    hi.value = pred.label;
+    if (int.tryParse(pred.label) != null) {
+      _score.update((val) {
+        _score.value = int.parse(pred.label);
+      });
+    }
+    // setState(() {
+    //   this.category = pred;
+    // });
   }
 }

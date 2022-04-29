@@ -1,9 +1,11 @@
+import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:haci/app/core/image_utils.dart';
 import 'package:haci/app/data/enums/run_type.dart';
 import 'package:haci/app/data/enums/team.dart';
 import 'package:share_plus/share_plus.dart';
@@ -28,15 +30,26 @@ class GroundView extends GetView<GroundController> {
           IconButton(
             onPressed: () async {
               if (!controller.showCam) {
-                controller.cameraController?.initialize().then((value) async {
-                  controller.showCam = true;
-                  // controller.cameraController?.startImageStream((image) {
-                  //   controller.cameraImage = image;
-                  // });
-                });
+                if (controller.initialCamera) {
+                  controller.cameraController?.resumePreview();
+                  controller.cameraController?.initialize().then((value) async {
+                    controller.showCam = true;
+                    controller.startStream();
+                  });
+                } else {
+                  controller.initialCamera = true;
+                  controller.cameraController?.initialize().then((value) async {
+                    controller.showCam = true;
+                    controller.startStream();
+                  });
+                }
               } else {
                 controller.showCam = false;
-                await controller.cameraController?.pausePreview();
+                try {
+                  await controller.cameraController?.stopImageStream();
+
+                  await controller.cameraController?.pausePreview();
+                } catch (e) {}
               }
             },
             icon: Icon(
@@ -51,14 +64,26 @@ class GroundView extends GetView<GroundController> {
               Icons.share_rounded,
             ),
           ),
+          // IconButton(
+          //   onPressed: () async {
+          //     controller.i != null
+          //         ? Get.defaultDialog(
+          //             content: Image.file(
+          //                 File(await ImageUtils.saveImage(controller.i!))))
+          //         : null;
+          //   },
+          //   icon: Icon(
+          //     Icons.share_rounded,
+          //   ),
+          // ),
         ],
       ),
-      body: Obx(() => Column(children: groundOrder(controller))),
+      body: Obx(() => Column(children: groundOrder(controller, context))),
     );
   }
 }
 
-List<Widget> groundOrder(GroundController controller) {
+List<Widget> groundOrder(GroundController controller, BuildContext context) {
   return <Widget>[
     Column(
       children: [
@@ -96,6 +121,7 @@ List<Widget> groundOrder(GroundController controller) {
           //   "${controller.ground.nowBatting == Team.redTeam.name ? "Red Team" : "Blue Team"}",
           //   style: Get.textTheme.headline5,
           // ),
+          // Image.file(controller.cameraImage)
           controller.isSecondInnings
               ? Column(
                   mainAxisSize: MainAxisSize.min,
@@ -108,8 +134,10 @@ List<Widget> groundOrder(GroundController controller) {
                       controller.blueScore.toString(),
                       style: Get.textTheme.headline3,
                     ),
-                    Text("Balls left: "
-                        "${controller.ground.balls! - controller.blueBalls.length}"),
+                    (controller.ground.ballsType == "unlimitedBalls")
+                        ? Container()
+                        : Text("Balls left: "
+                            "${controller.ground.balls! - controller.blueBalls.length}"),
                     Text("First Innings: ${controller.redScore}")
                   ],
                 )
@@ -149,24 +177,39 @@ List<Widget> groundOrder(GroundController controller) {
           ),
           !controller.lockInput
               ? controller.showCam
-                  ? SizedBox(
-                      height: 200,
-                      width: 200,
-                      child: controller.cameraController?.buildPreview())
-                  : Wrap(
-                      children: [0, 1, 2, 3, 4, 5, 6]
-                          .map(
-                            (e) => Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  controller.scoreUpdate(e);
-                                },
-                                child: Text("$e"),
+                  ? Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        SizedBox(
+                          height: 320,
+                          width: 240,
+                          child: controller.cameraController?.buildPreview(),
+                        ),
+                        Container(
+                          decoration: BoxDecoration(border: Border.all()),
+                          height: 224,
+                          width: 224,
+                        ),
+                      ],
+                    )
+                  : SizedBox(
+                      width: context.width * .6,
+                      child: Wrap(
+                        alignment: WrapAlignment.center,
+                        children: [0, 1, 2, 3, 4, 5, 6]
+                            .map(
+                              (e) => Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    controller.scoreUpdate(e);
+                                  },
+                                  child: Text("$e"),
+                                ),
                               ),
-                            ),
-                          )
-                          .toList(),
+                            )
+                            .toList(),
+                      ),
                     )
               : Container(),
         ],

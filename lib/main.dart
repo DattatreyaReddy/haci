@@ -22,7 +22,7 @@ Future<void> main() async {
     WidgetsFlutterBinding.ensureInitialized();
     cameras = await availableCameras();
   } on CameraException catch (e) {
-    // logError(e.code, e.description);
+    print(e);
   }
   await GetStorage.init();
   Get.put(LocalStorageService());
