@@ -221,7 +221,11 @@ class GroundController extends GetxController {
     hi.value = pred.label;
     if (int.tryParse(pred.label) != null) {
       _score.update((val) {
-        _score.value = int.parse(pred.label);
+        _score(int.parse(pred.label));
+      });
+    }else{
+      _score.update((val) {
+        _score(val);
       });
     }
     // setState(() {
